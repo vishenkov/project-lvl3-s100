@@ -1,5 +1,5 @@
 {
-  "name": "page-loader",
+  "name": "page-loader-vishkir",
   "version": "0.0.1",
   "description": "Downloads all resourses of a specified page",
   "main": "dist/index.js",

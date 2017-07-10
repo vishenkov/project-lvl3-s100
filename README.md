@@ -1,4 +1,4 @@
-# gendiff cli-utility
+# page-loader cli-utility
 [![Code Climate](https://codeclimate.com/github/vishenkov/project-lvl3-s100/badges/gpa.svg)](https://codeclimate.com/github/vishenkov/project-lvl3-s100)
 [![Test Coverage](https://codeclimate.com/github/vishenkov/project-lvl3-s100/badges/coverage.svg)](https://codeclimate.com/github/vishenkov/project-lvl3-s100/coverage)
 [![Issue Count](https://codeclimate.com/github/vishenkov/project-lvl3-s100/badges/issue_count.svg)](https://codeclimate.com/github/vishenkov/project-lvl3-s100)

@@ -4,7 +4,7 @@ node_js:
 
 addons:
   code_climate:
-    repo_token: f7e09a40c8ea7f6e9f129a8ecff6041548a84b02030f34bc251d435ed10f1e79
+    repo_token: 4f5e844017b673d26e824bc8f636dc8ad820f324da8286c64d77b34384e4b7f6
 
 script: make lint test
 
