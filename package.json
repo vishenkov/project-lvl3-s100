@@ -1,0 +1,48 @@
+{
+  "name": "page-loader",
+  "version": "0.0.1",
+  "description": "Downloads all resourses of a specified page",
+  "main": "dist/index.js",
+  "bin": {
+    "page-loader": "dist/bin/page-loader.js"
+  },
+  "jest": {
+    "verbose": true,
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__fixtures__/"
+    ],
+    "collectCoverage": true,
+    "coverageDirectory": "testcoverage",
+    "coverageReporters": ["lcov"]
+  },
+  "scripts": {
+    "babel-node": "babel-node",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublish": "npm run build",
+    "eslint": "eslint src/* __tests__/*",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishenkov/project-lvl3-s100.git"
+  },
+  "author": "Kirill Vishenkov <vishkir1991@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vishenkov/project-lvl3-s100/issues"
+  },
+  "homepage": "https://github.com/vishenkov/project-lvl3-s100#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-eslint": "^7.2.3",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jest": "^20.0.3",
+    "jest": "^20.0.4"
+  }
+}
