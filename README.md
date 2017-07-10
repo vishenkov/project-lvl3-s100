@@ -17,3 +17,17 @@ make install
 ```
 npm install page-loader-vishkir
 ```
+
+## Help
+```
+Usage: page-loader [options] <host>
+
+Downloads all resourses of a specified page
+
+
+Options:
+
+  -V, --version       output the version number
+  -o, --output [dir]  output directory
+  -h, --help          output usage information
+```
