@@ -14,7 +14,9 @@
     ],
     "collectCoverage": true,
     "coverageDirectory": "testcoverage",
-    "coverageReporters": ["lcov"]
+    "coverageReporters": [
+      "lcov"
+    ]
   },
   "scripts": {
     "babel-node": "babel-node",
@@ -43,6 +45,12 @@
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jest": "^20.0.3",
-    "jest": "^20.0.4"
+    "jest": "^20.0.4",
+    "nock": "^9.0.13"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "commander": "^2.11.0",
+    "mz": "^2.6.0"
   }
 }
