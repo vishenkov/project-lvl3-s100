@@ -8,7 +8,13 @@ export default () => {
     .option('-o, --output [dir]', 'output directory')
     .arguments('<host>')
     .action((host) => {
-      console.log(loader(host, program.output));
+      loader(host, program.output)
+        .then(() => {
+          console.log('Success!');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     })
     .parse(process.argv);
 };
