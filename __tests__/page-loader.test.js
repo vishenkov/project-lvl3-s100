@@ -1,7 +1,7 @@
 import nock from 'nock';
 import fs from 'fs';
 import mzfs from 'mz/fs';
-import os from 'os';
+// import os from 'os';
 import path from 'path';
 import loadData from '../src/loadData';
 import { getName, pageloader } from '../src';
