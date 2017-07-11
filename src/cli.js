@@ -8,7 +8,7 @@ export default () => {
     .option('-o, --output [dir]', 'output directory')
     .arguments('<host>')
     .action((host) => {
-      console.log(pageloader(host, program.format));
+      console.log(pageloader(host, program.output));
     })
     .parse(process.argv);
 };

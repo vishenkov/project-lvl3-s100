@@ -1,10 +1,17 @@
-import pageloader from './pageloader';
+import url from 'url';
+import loadData from './loadData';
+import writeFile from './writeFile';
 
-const getName = host =>
-  `${host.replace(/\W/g, '-')}.html`;
-
-export default (host, dir = './') => {
-  console.log(getName('ru.hexlet.io/courses'));
-  console.log(dir);
-  pageloader(host);
+export const getName = (link) => {
+  const { host, path } = url.parse(link);
+  return `${`${host + path}`.replace(/\W/g, '-')}.html`;
 };
+
+export const pageloader = (host, dir = './') =>
+  loadData(host)
+    .then(response =>
+      writeFile(dir, getName(host), response.data))
+    .catch(error =>
+      new Error(error));
+
+export default pageloader;

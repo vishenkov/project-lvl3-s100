@@ -1,12 +1,12 @@
-import axios from 'axios';
 import nock from 'nock';
-import httpAdapter from 'axios/lib/adapters/http';
-import pageloader from '../src/pageloader';
+import fs from 'fs';
+import mzfs from 'mz/fs';
+import os from 'os';
+import path from 'path';
+import loadData from '../src/loadData';
+import { getName, pageloader } from '../src';
 
 const host = 'http://localhost';
-
-axios.defaults.host = host;
-axios.defaults.adapter = httpAdapter;
 
 test('pageloader test!', () => {
   nock(host)
@@ -14,8 +14,39 @@ test('pageloader test!', () => {
     .reply(200, 'test data');
 
   expect.assertions(1);
-  return pageloader(host)
+  return loadData(host)
     .then((data) => {
-      expect(data).toBe('test data');
+      expect(data.data).toBe('test data');
     });
+});
+
+describe('file test', () => {
+  let dir = './';
+  beforeEach(() => {
+    dir = fs.mkdtempSync(os.tmpdir(), (err, folder) => {
+      if (err) throw err;
+      return folder;
+    });
+  });
+  test('pageloader index test!', () => {
+    nock(host)
+      .get('/')
+      .reply(200, 'test data');
+    expect.assertions(1);
+    return pageloader(host, dir)
+      .then(() =>
+        mzfs.readFile(path.join(dir, getName(host)), 'utf8'))
+      .then((readData) => {
+        expect(readData.toString()).toBe('test data');
+      });
+  });
+  test('pageloader 404 error!', () => {
+    nock(host)
+      .get('/')
+      .reply(404, 'Page Not Found');
+    expect.assertions(1);
+    return pageloader(host, dir)
+      .then(e =>
+        expect(e).toBeInstanceOf(Error));
+  });
 });
