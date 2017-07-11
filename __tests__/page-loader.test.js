@@ -23,7 +23,7 @@ test('pageloader test!', () => {
 describe('file test', () => {
   let dir = './';
   beforeEach(() => {
-    dir = fs.mkdtempSync(os.tmpdir(), (err, folder) => {
+    dir = fs.mkdtempSync('./', (err, folder) => {
       if (err) throw err;
       return folder;
     });
