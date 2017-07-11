@@ -11,7 +11,7 @@ const host = 'http://localhost';
 const fixturesPath = './__tests__/__fixtures__/';
 
 describe('inner libs test', () => {
-  test('loadData test', () => {
+  test('loadData: test', () => {
     nock(host)
       .get('/')
       .reply(200, 'test data');
@@ -43,20 +43,24 @@ describe('inner libs test', () => {
       .then((exists) => {
         fs.unlinkSync(`${localPath}test`);
         fs.rmdirSync(`${fixturesPath}dir`);
+        fs.rmdirSync(fixturesPath);
         expect(exists).toBe(true);
       });
   });
 });
 
-describe('file test', () => {
+describe('lib test', () => {
   let dir = './';
+  beforeAll(() => {
+    fs.mkdirSync(fixturesPath);
+  });
   beforeEach(() => {
     dir = fs.mkdtempSync(fixturesPath);
   });
-  afterEach(() => {
-    rmrf(dir, () => {});
+  afterAll(() => {
+    rmrf(fixturesPath, () => {});
   });
-  test('pageloader index test', () => {
+  test('pageloader: index test', () => {
     nock(host)
       .get('/')
       .reply(200, 'test data');
@@ -68,7 +72,7 @@ describe('file test', () => {
         expect(readData.toString()).toBe('test data');
       });
   });
-  test('pageloader 404 error', () => {
+  test('pageloader: 404 error', () => {
     nock(host)
       .get('/')
       .reply(404, 'Page Not Found');
