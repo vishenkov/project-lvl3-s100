@@ -22,7 +22,7 @@ export default (html, host, dir) => {
     const promises = $(tagName)
       .filter((index, element) => {
         const attrValue = $(element).attr(sourceAttr[tagName]);
-        return attrValue.match(hrefReg);
+        return attrValue ? attrValue.match(hrefReg) : false;
       })
       .map((index, element) => {
         const attrValue = $(element).attr(sourceAttr[tagName]);
