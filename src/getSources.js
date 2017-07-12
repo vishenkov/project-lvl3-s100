@@ -1,7 +1,7 @@
 import path from 'path';
 import cheerio from 'cheerio';
 import loadData from './loadData';
-import { makeDir, writeFile } from './fs';
+import { writeFile } from './fs';
 import { getHostName, getFileName } from './name';
 
 export default (html, host, dir) => {
@@ -19,29 +19,29 @@ export default (html, host, dir) => {
   };
 
   const sources = Object.keys(sourceAttr).reduce((acc, tagName) => {
-    const promises = $(tagName)
+    const srcObjs = [];
+    $(tagName)
       .filter((index, element) => {
         const attrValue = $(element).attr(sourceAttr[tagName]);
         return attrValue ? attrValue.match(hrefReg) : false;
       })
-      .map((index, element) => {
+      .each((index, element) => {
         const attrValue = $(element).attr(sourceAttr[tagName]);
         const fileName = getFileName(attrValue);
         $(element).attr(sourceAttr[tagName], `/${folder}/${fileName}`);
-        return loadData(`${host}${path.join('/', attrValue)}`)
-          .then((response) => {
-            if (tagName === 'img') {
-              return writeFile(resultPath, fileName, response.data.pipe, 'bin');
-            }
-            return writeFile(resultPath, fileName, response.data);
-          });
+        if (tagName === 'img') {
+          srcObjs.push({ attrValue, fileName, type: 'bin' });
+        }
+        srcObjs.push({ attrValue, fileName, type: 'text' });
       });
-    return [...acc, promises];
+    return [...acc, ...srcObjs];
   }, []);
 
-  return makeDir(resultPath)
+  return writeFile(dir, `${hostName}.html`, $.html())
     .then(() =>
-      Promise.all(sources))
-    .then(() =>
-      writeFile(dir, `${hostName}.html`, $.html()));
+      Promise.all(sources.map(data =>
+        loadData(`${host}${path.join('/', data.attrValue)}`, data.type)
+          .then(response =>
+            writeFile(resultPath, data.fileName, response.data, data.type))
+          .catch(e => e.response))));
 };
