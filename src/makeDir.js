@@ -1,7 +1,7 @@
 import fs from 'mz/fs';
 import path from 'path';
 
-export default (dir, filename, data = '') => {
+export default (dir) => {
   const workDir = path.resolve(dir);
   return fs.exists(workDir)
     .then((exists) => {
@@ -9,7 +9,5 @@ export default (dir, filename, data = '') => {
         return fs.mkdir(workDir);
       }
       return this;
-    })
-    .then(() =>
-      fs.writeFile(path.join(workDir, filename), data, 'utf8'));
+    });
 };
