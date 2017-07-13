@@ -194,7 +194,7 @@ describe('lib test', () => {
       .get('/')
       .reply(500);
     expect.assertions(1);
-    return loader(host, `${dir}${path.sep}dir${path.sep}another`)
+    return loader(host, `${dir}${path.sep}dir${path.sep}another${path.sep}`)
       .catch((error) => {
         expect(error).toBeInstanceOf(Error);
       });

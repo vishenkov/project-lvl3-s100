@@ -49,8 +49,8 @@ export default (html, host, dir) => {
           .then(response =>
             writeFile(resultPath, data.fileName, response.data, data.type))
           .catch((e) => {
-            const statusText = e.response.statusText ? ` ${e.response.statusText} ` : '';
-            const text = `Error: ${e.response.status}${statusText}${e.response.config.url}`;
+            const statusText = e.response.statusText ? `${e.response.statusText} ` : '';
+            const text = `Error: ${e.response.status} ${statusText}${e.response.config.url}`;
             debug(text);
             console.error(text);
             return e.response;
