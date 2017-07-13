@@ -1,6 +1,6 @@
 {
   "name": "page-loader-vishkir",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Downloads all resourses of a specified page",
   "main": "dist/index.js",
   "bin": {
