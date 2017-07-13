@@ -44,7 +44,14 @@ export const writeFile = (dir, filename, data = '', type = 'text') => {
       }
     })
     .catch((e) => {
-      debug(e);
-      throw new Error(e);
+      switch (e.code) {
+        case 'EACCES':
+          debug(`ERROR: EACCES ${dir}`);
+          console.error(`Error: EACCES: permission denied ${e.path}`);
+          throw new Error(e);
+        default:
+          debug(`ERROR: ${e}`);
+          throw new Error(e);
+      }
     });
 };
