@@ -1,7 +1,6 @@
 import axios from './lib/axios';
 import debugModule from './lib/debug';
 
-
 const debug = debugModule('loadData');
 
 export default (uri, type = 'text') => {

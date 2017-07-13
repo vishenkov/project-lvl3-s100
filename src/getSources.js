@@ -14,7 +14,7 @@ export default (html, host, dir) => {
   const folder = `${hostName}_files`;
   const resultPath = path.resolve(dir, folder);
   const hrefReg = /^(?!http.:\/\/)/g;
-  debug(`result path = ${resultPath}`);
+  debug(`files path = ${resultPath}`);
   const sourceAttr = {
     link: 'href',
     img: 'src',
@@ -31,11 +31,12 @@ export default (html, host, dir) => {
       .each((index, element) => {
         const attrValue = $(element).attr(sourceAttr[tagName]);
         const fileName = getFileName(attrValue);
-        $(element).attr(sourceAttr[tagName], `/${folder}/${fileName}`);
+        $(element).attr(sourceAttr[tagName], `${folder}${path.sep}${fileName}`);
         if (tagName === 'img') {
           srcObjs.push({ attrValue, fileName, type: 'bin' });
+        } else {
+          srcObjs.push({ attrValue, fileName, type: 'text' });
         }
-        srcObjs.push({ attrValue, fileName, type: 'text' });
       });
     return [...acc, ...srcObjs];
   }, []);
@@ -48,7 +49,10 @@ export default (html, host, dir) => {
           .then(response =>
             writeFile(resultPath, data.fileName, response.data, data.type))
           .catch((e) => {
-            debug(`Error catch: ${e.response}`);
+            const statusText = e.response.statusText ? ` ${e.response.statusText} ` : '';
+            const text = `Error: ${e.response.status}${statusText}${e.response.config.url}`;
+            debug(text);
+            console.error(text);
             return e.response;
           }))));
 };

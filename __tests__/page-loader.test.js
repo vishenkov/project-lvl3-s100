@@ -28,6 +28,10 @@ describe('inner libs test', () => {
     expect(getFileName('/assets/file.main.min.js')).toBe('assets-file-main-min.js');
   });
 
+  test('getFileName: assets/file.main.min.js', () => {
+    expect(getFileName('/assets/file.main.min.js')).toBe('assets-file-main-min.js');
+  });
+
   test('getHostName: https://ru.hexlet.io/courses', () => {
     expect(getHostName('https://ru.hexlet.io/courses')).toBe('ru-hexlet-io-courses');
   });
@@ -72,6 +76,15 @@ describe('fs test', () => {
       });
   });
 
+  test('writeFile: write to dir', () => {
+    expect.assertions(1);
+    fs.mkdirSync(`${dir}${path.sep}dir`);
+    return writeFile(`${dir}${path.sep}`, 'dir', 'some data')
+      .catch((e) => {
+        expect(e).toBeInstanceOf(Error);
+      });
+  });
+
   test('makeDir: os.tmp/dir/', () => {
     expect.assertions(1);
     return makeDir(`${dir}${path.sep}dir`)
@@ -93,6 +106,23 @@ describe('fs test', () => {
         expect(exists).toBe(true);
       }));
   });
+
+  test('makeDir: make unexisting folder os.tmp/dir/another', () => {
+    expect.assertions(1);
+    return makeDir(`${dir}${path.sep}dir${path.sep}another`)
+      .catch((e) => {
+        expect(e).toBeInstanceOf(Error);
+      });
+  });
+
+  test('makeDir: file in path os.tmp/file/dir', () => {
+    expect.assertions(1);
+    fs.writeFileSync(`${dir}${path.sep}file`, 'data', 'utf8');
+    return makeDir(`${dir}${path.sep}file${path.sep}dir`)
+      .catch((e) => {
+        expect(e).toBeInstanceOf(Error);
+      });
+  });
 });
 
 describe('lib test', () => {
@@ -113,14 +143,61 @@ describe('lib test', () => {
       });
   });
 
-  test('pageloader: 404 error', () => {
+  test('pageloader: host 404 error', () => {
     nock(host)
       .get('/')
       .reply(404, 'Page Not Found');
     expect.assertions(1);
     return loader(host, dir)
-      .catch(error =>
-        expect(error).toBeInstanceOf(Error));
+      .catch((error) => {
+        expect(error).toBeInstanceOf(Error);
+      });
+  });
+
+  test('pageloader: host - OK, file - 404 error', () => {
+    const content = '<img src="1.jpg" />';
+    nock(host)
+      .get('/')
+      .reply(200, content)
+      .get('/1.jpg')
+      .reply(404);
+    expect.assertions(1);
+    return loader(host, dir)
+      .then(() =>
+        mzfs.readFile(path.join(dir, `${getHostName(host)}.html`), 'utf8'))
+      .then((readData) => {
+        expect(readData).toBe('<html><head></head><body><img src="localhost-_files/1.jpg"></body></html>');
+      });
+  });
+
+  test('pageloader: uncorrect host', () => {
+    expect.assertions(1);
+    return loader('ya.ru\\', dir)
+      .catch((error) => {
+        expect(error).toBeInstanceOf(Error);
+      });
+  });
+
+  test('pageloader: host 500 error', () => {
+    nock(host)
+      .get('/')
+      .reply(500);
+    expect.assertions(1);
+    return loader(host, dir)
+      .catch((error) => {
+        expect(error).toBeInstanceOf(Error);
+      });
+  });
+
+  test('pageloader: unexisting dir', () => {
+    nock(host)
+      .get('/')
+      .reply(500);
+    expect.assertions(1);
+    return loader(host, `${dir}${path.sep}dir${path.sep}another`)
+      .catch((error) => {
+        expect(error).toBeInstanceOf(Error);
+      });
   });
 
   test('pageloader: onepage test', () => {
@@ -131,13 +208,23 @@ describe('lib test', () => {
       .get('/assets/style.css')
       .reply(200, fs.readFileSync(`${onepagePath}assets/style.css`, 'utf8'))
       .get('/js/main.js')
-      .reply(200, fs.readFileSync(`${onepagePath}js/main.js`, 'utf8'));
-    expect.assertions(1);
+      .reply(200, fs.readFileSync(`${onepagePath}js/main.js`, 'utf8'))
+      .get('/assets/logo.png')
+      .reply(200, fs.createReadStream(`${onepagePath}assets/logo.png`));
+
+    expect.assertions(2);
+
     return loader(host, dir)
       .then(() =>
         mzfs.readFile(path.join(dir, `${getHostName(host)}_files/js-main.js`), 'utf8'))
       .then((readData) => {
         const file = fs.readFileSync(`${onepagePath}js/main.js`, 'utf8');
+        expect(readData).toBe(file);
+      })
+      .then(() =>
+        mzfs.readFile(path.join(dir, `${getHostName(host)}_files/assets-style.css`), 'utf8'))
+      .then((readData) => {
+        const file = fs.readFileSync(`${onepagePath}assets/style.css`, 'utf8');
         expect(readData).toBe(file);
       });
   });

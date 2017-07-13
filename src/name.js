@@ -9,7 +9,8 @@ export const getHostName = (link) => {
 };
 
 export const getFileName = (file) => {
-  const { dir, name, ext } = pathModule.parse(file);
+  const filePath = pathModule.join(pathModule.sep, file);
+  const { dir, name, ext } = pathModule.parse(filePath);
   const dirPath = dir.substring(1);
   const newFileName = replace(`${dirPath}${dirPath.length > 0 ? '/' : ''}${name}`);
   return `${newFileName}${ext}`;
