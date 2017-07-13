@@ -1,8 +1,11 @@
 import path from 'path';
 import cheerio from 'cheerio';
+import debugModule from './lib/debug';
 import loadData from './loadData';
 import { writeFile } from './fs';
 import { getHostName, getFileName } from './name';
+
+const debug = debugModule('getSources');
 
 export default (html, host, dir) => {
   const $ = cheerio.load(html);
@@ -11,7 +14,7 @@ export default (html, host, dir) => {
   const folder = `${hostName}_files`;
   const resultPath = path.resolve(dir, folder);
   const hrefReg = /^(?!http.:\/\/)/g;
-
+  debug(`result path = ${resultPath}`);
   const sourceAttr = {
     link: 'href',
     img: 'src',
@@ -36,6 +39,7 @@ export default (html, host, dir) => {
       });
     return [...acc, ...srcObjs];
   }, []);
+  debug(`resources count = ${sources.length}`);
 
   return writeFile(dir, `${hostName}.html`, $.html())
     .then(() =>
@@ -43,5 +47,8 @@ export default (html, host, dir) => {
         loadData(`${host}${path.join('/', data.attrValue)}`, data.type)
           .then(response =>
             writeFile(resultPath, data.fileName, response.data, data.type))
-          .catch(e => e.response))));
+          .catch((e) => {
+            debug(`Error catch: ${e.response}`);
+            return e.response;
+          }))));
 };
