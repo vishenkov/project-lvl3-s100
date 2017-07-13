@@ -44,8 +44,7 @@ export const writeFile = (dir, filename, data = '', type = 'text') => {
       }
     })
     .catch((e) => {
-      console.error(`Error: ${e.code}: ${e.path}`);
-      debug(`ERROR: ${e.code} ${e.path}`);
+      debug(e);
       throw new Error(e);
     });
 };
