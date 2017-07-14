@@ -7,7 +7,6 @@ import { writeFile, makeDir } from '../src/fs';
 import loadData from '../src/loadData';
 import loader from '../src';
 import { getHostName, getFileName } from '../src/name';
-import cli from '../src/cli';
 
 const host = 'http://localhost';
 const fixturesPath = './__tests__/__fixtures__/';
