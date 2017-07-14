@@ -1,22 +1,27 @@
 import debugModule from './lib/debug';
 import loadData from './loadData';
 import getSources from './getSources';
+import { writeFile } from './fs';
+import { getHostName } from './name';
 
 const debug = debugModule('index');
 
 export const pageloader = (host, dir = './') => {
-  debug(`request ${host} to ${dir}`);
+  const hostName = getHostName(host);
+  debug(`requested: ${host} to ${dir}`);
+
   return loadData(host)
     .catch((e) => {
-      const statusText = e.response.statusText ? `${e.response.statusText} ` : '';
-      const text = `Error: ${e.response.status} ${statusText}${e.response.config.url}`;
-      debug(text);
-      console.error(text);
-      console.error(`Can't reach ${host} :(\nPlease, check host name and your internet connection`);
+      debug(e);
       throw new Error(e);
     })
     .then(response =>
-      getSources(response.data, host, dir));
+      getSources(response.data, hostName, dir))
+    .then(([html, sources]) => {
+      debug('get parsed html and sources list');
+      return writeFile(dir, `${hostName}.html`, html)
+        .then(() => [hostName, sources]);
+    });
 };
 
 export default pageloader;

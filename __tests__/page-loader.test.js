@@ -7,6 +7,7 @@ import { writeFile, makeDir } from '../src/fs';
 import loadData from '../src/loadData';
 import loader from '../src';
 import { getHostName, getFileName } from '../src/name';
+import cli from '../src/cli';
 
 const host = 'http://localhost';
 const fixturesPath = './__tests__/__fixtures__/';
@@ -215,17 +216,9 @@ describe('lib test', () => {
     expect.assertions(2);
 
     return loader(host, dir)
-      .then(() =>
-        mzfs.readFile(path.join(dir, `${getHostName(host)}_files/js-main.js`), 'utf8'))
-      .then((readData) => {
-        const file = fs.readFileSync(`${onepagePath}js/main.js`, 'utf8');
-        expect(readData).toBe(file);
-      })
-      .then(() =>
-        mzfs.readFile(path.join(dir, `${getHostName(host)}_files/assets-style.css`), 'utf8'))
-      .then((readData) => {
-        const file = fs.readFileSync(`${onepagePath}assets/style.css`, 'utf8');
-        expect(readData).toBe(file);
+      .then(([hostName, sources]) => {
+        expect(hostName).toBe(getHostName(host));
+        expect(sources.length).toBe(3);
       });
   });
 });

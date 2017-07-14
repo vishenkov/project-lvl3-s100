@@ -15,21 +15,19 @@ export const makeDir = (dir) => {
           return e.code;
         case 'ENOENT':
           debug(`ERROR: ENOENT ${dir}`);
-          console.error(`Error: ENOENT: no such directory ${e.path}`);
-          throw new Error(e);
+          throw new Error(`ENOENT: no such directory ${e.path}`);
         case 'EACCES':
           debug(`ERROR: EACCES ${dir}`);
-          console.error(`Error: EACCES: permission denied ${e.path}`);
-          throw new Error(e);
+          throw new Error(`EACCES: permission denied ${e.path}`);
         default:
           debug(`ERROR: ${e.code} ${e.path}`);
-          console.error(`Error: ${e.code}: ${e.path}`);
           throw new Error(e);
       }
     });
 };
 
 export const writeFile = (dir, filename, data = '', type = 'text') => {
+  debug(`request to write ${dir} ${filename}`);
   const workDir = path.resolve(dir);
   return makeDir(workDir)
     .then(() => {
@@ -45,10 +43,6 @@ export const writeFile = (dir, filename, data = '', type = 'text') => {
     })
     .catch((e) => {
       switch (e.code) {
-        case 'EACCES':
-          debug(`ERROR: EACCES ${dir}`);
-          console.error(`Error: EACCES: permission denied ${e.path}`);
-          throw new Error(e);
         default:
           debug(`ERROR: ${e}`);
           throw new Error(e);
