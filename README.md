@@ -6,7 +6,7 @@
 [![NPM Version](http://img.shields.io/npm/v/page-loader-vishkir.svg?style=flat)](https://www.npmjs.org/package/page-loader-vishkir)
 
 ## About
-> Downloads all resourses of a specified page _work in progress_
+> Downloads all resourses of a specified page 
 
 ## Setup
 ```
@@ -30,4 +30,19 @@ Options:
   -V, --version       output the version number
   -o, --output [dir]  output directory
   -h, --help          output usage information
+```
+
+## Usage example
+```
+page-loader -o ./tmp https://vishenkov.github.io
+ ✖ https://vishenkov.github.io/assets/img/favicon.png
+   → Error: Request failed with status code 404
+ ✖ https://vishenkov.github.io/assets/css/notexisting.css
+   → Error: Request failed with status code 404
+ ✔ https://vishenkov.github.io/assets/css/foundation.css
+ ✔ https://vishenkov.github.io/assets/js/app.js
+ ✔ https://vishenkov.github.io/assets/css/app.css
+ ✔ https://vishenkov.github.io/assets/img/user.jpg
+Page was downloaded as 'vishenkov-github-io-.html'
+
 ```
