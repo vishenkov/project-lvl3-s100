@@ -6,7 +6,7 @@
 [![NPM Version](http://img.shields.io/npm/v/page-loader-vishkir.svg?style=flat)](https://www.npmjs.org/package/page-loader-vishkir)
 
 ## About
-> Downloads all resourses of a specified page 
+> Downloads all resources of a specified page 
 
 ## Setup
 ```
@@ -22,7 +22,7 @@ npm install page-loader-vishkir
 ```
 Usage: page-loader [options] <host>
 
-Downloads all resourses of a specified page
+Downloads all resources of a specified page
 
 
 Options:

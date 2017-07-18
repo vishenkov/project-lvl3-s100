@@ -12,7 +12,7 @@ const debug = debugModule('cli');
 export default () => {
   program
     .version(pkgjson.version)
-    .description('Downloads all resourses of a specified page')
+    .description(pkgjson.description)
     .option('-o, --output [dir]', 'output directory')
     .arguments('<host>')
     .action((host) => {
